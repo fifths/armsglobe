@@ -3,16 +3,16 @@ var masterContainer = document.getElementById('visualization');
 var overlay = document.getElementById('visualization');
 
 
-function GetQueryString(name)
-{
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
-    if(r!=null)return  unescape(r[2]); return null;
+    if (r != null) return unescape(r[2]);
+    return null;
 }
 
 //var k1year=GetQueryString("year");
-var k1year=2014;
-var kyear=parseInt(k1year+'01');
+var k1year = 2014;
+var kyear = parseInt(k1year + '01');
 
 var mapIndexedImage;
 var mapOutlineImage;
@@ -72,7 +72,7 @@ var weaponLookup = {
     'Military Weapons': 'mil',
     'Civilian Weapons': 'civ',
     'Ammunition': 'ammo'
-    /*'internetd': 'internet',*/
+        /*'internetd': 'internet',*/
 };
 
 //	a list of the reverse for easy lookup
@@ -88,7 +88,7 @@ var categoryColors = {
     'mil': 0xdd380c,
     'civ': 0x3dba00,
     'ammo': 0x154492
-    /*'internet':0xffffff*/
+        /*'internet':0xffffff*/
 }
 
 //出发地颜色
@@ -188,7 +188,6 @@ function initScene() {
     scene = new THREE.Scene();
     scene.matrixAutoUpdate = false;
     // scene.fog = new THREE.FogExp2( 0xBBBBBB, 0.00003 );
-
     scene.add(new THREE.AmbientLight(0x505050));
 
     light1 = new THREE.SpotLight(0xeeeeee, 3);
@@ -815,8 +814,8 @@ function getHistoricalData(country) {
         var value = {
             imports: 0,
             exports: 0,
-            importsOrderCount:0,
-            exportsOrderCount:0
+            importsOrderCount: 0,
+            exportsOrderCount: 0
         };
         for (var s in yearBin) {
             var set = yearBin[s];
@@ -838,10 +837,10 @@ function getHistoricalData(country) {
             //console.log(set.v);
             if (exporterCountryName == countryName)
                 value.exports += set.v.TouristsCount;
-                value.exportsOrderCount+= set.v.OrderCount;
+            value.exportsOrderCount += set.v.OrderCount;
             if (importerCountryName == countryName)
                 value.imports += set.v.TouristsCount;
-                value.importsOrderCount+= set.v.OrderCount;
+            value.importsOrderCount += set.v.OrderCount;
         }
         history.push(value);
     }
