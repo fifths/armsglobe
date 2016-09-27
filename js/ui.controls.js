@@ -59,7 +59,7 @@ var d3Graphs = {
         $("#hudHeader, #hudButtons").show();
         $("#history").show();
         $("#graphIcon").show();
-        $("#importExportBtns").show();
+        //$("#importExportBtns").show();
         $("#graphIcon").click(d3Graphs.graphIconClick);
         $("#history .close").click(d3Graphs.closeHistogram);
         $("#history ul li").click(d3Graphs.clickTimeline);
@@ -84,7 +84,10 @@ var d3Graphs = {
         $(window).resize(d3Graphs.windowResizeCB);
         $(".zoomBtn").mousedown(d3Graphs.zoomBtnClick);
         $(".zoomBtn").mouseup(d3Graphs.zoomBtnMouseup);
-
+        $(".nbBtn").mousedown(d3Graphs.showNb);
+    },
+    showNb: function() {
+        d3Graphs.updateViz("宁波")
     },
     zoomBtnMouseup: function() {
         clearInterval(d3Graphs.zoomBtnInterval);
@@ -129,8 +132,9 @@ var d3Graphs = {
         var index = index1;
         var leftPos = d3Graphs.handleLeftOffset + d3Graphs.handleInterval * index;
         $("#handle").css('left', leftPos + "px");
-        d3Graphs.updateViz();
         d3Graphs.graphIconClick();
+        d3Graphs.updateViz();
+
     },
     windowResizeCB: function() {
         clearTimeout(d3Graphs.windowResizeTimeout);
@@ -191,7 +195,7 @@ var d3Graphs = {
         }
     },
 
-    updateViz: function() {
+    updateViz: function(country) {
         var yearOffset = $("#handle").css('left');
         console.log('handle');
         console.log(yearOffset);
@@ -210,8 +214,10 @@ var d3Graphs = {
 
         console.log(year);
 
+        if (!country) {
+            country = $("#hudButtons .countryTextInput").val().toUpperCase();
+        }
 
-        var country = $("#hudButtons .countryTextInput").val().toUpperCase();
         if (typeof countryData[country] == 'undefined') {
             return;
         }
@@ -224,12 +230,15 @@ var d3Graphs = {
             var weaponTypeKey = btn.attr('class');
             var weaponName = reverseWeaponLookup[weaponTypeKey];
 
-            if (btn.find('.inactive').length == 0) {
-                exportArray.push(weaponName);
-                selectionData.exportCategories[weaponName] = true;
-            } else {
-                selectionData.exportCategories[weaponName] = false;
-            }
+
+            exportArray.push(weaponName);
+            selectionData.exportCategories[weaponName] = true;
+            // if (btn.find('.inactive').length == 0) {
+            //     exportArray.push(weaponName);
+            //     selectionData.exportCategories[weaponName] = true;
+            // } else {
+            //     selectionData.exportCategories[weaponName] = false;
+            // }
         }
         //imports esecond
         var importArray = []
@@ -238,12 +247,14 @@ var d3Graphs = {
             var btn = $(importBtns[i]);
             var weaponTypeKey = btn.attr('class');
             var weaponName = reverseWeaponLookup[weaponTypeKey];
-            if (btn.find('.inactive').length == 0) {
-                importArray.push(weaponName);
-                selectionData.importCategories[weaponName] = true;
-            } else {
-                selectionData.importCategories[weaponName] = false;
-            }
+            importArray.push(weaponName);
+            selectionData.importCategories[weaponName] = true;
+            // if (btn.find('.inactive').length == 0) {
+            //     importArray.push(weaponName);
+            //     selectionData.importCategories[weaponName] = true;
+            // } else {
+            //     selectionData.importCategories[weaponName] = false;
+            // }
         }
         selectionData.selectedYear = year;
         selectionData.selectedCountry = country;
@@ -456,8 +467,10 @@ var d3Graphs = {
             return d3Graphs.histogramYScale(0) + d3Graphs.histogramVertPadding + 6 + (d == '+' ? -yOffset : yOffset);
         }).text(String);
         //lines
-        var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
-        var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
+        var importsVisible = true;
+        var exportsVisible = true;
+        // var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
+        // var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
         $("#history .labels .exports").css('display', exportsVisible ? 'block' : 'none');
         $("#history .labels .imports").css('display', importsVisible ? 'block' : 'none');
 
@@ -538,8 +551,10 @@ var d3Graphs = {
                 return d3Graphs.histogramVertPadding + d3Graphs.histogramYScale(d.y);
             });
         yearDotLabels.enter().append('text').attr('class', 'yearLabel').attr('text-anchor', 'middle');
-        var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
-        var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
+        // var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
+        // var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
+        var importsVisible = true;
+        var exportsVisible = true;
 
         yearDots.attr('cx', function(d) {
                 return d3Graphs.histogramLeftPadding + d3Graphs.histogramXScale(d.x);
@@ -902,8 +917,10 @@ var d3Graphs = {
             }
         }
         //over all numeric Total Import/Export labels
-        var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
-        var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
+        // var importsVisible = $("#importExportBtns .imports .check").not(".inactive").length != 0;
+        // var exportsVisible = $("#importExportBtns .exports .check").not(".inactive").length != 0;
+        var importsVisible = true;
+        var exportsVisible = true;
         var importTotalLabel = this.barGraphSVG.selectAll('text.totalLabel').data([1]);
         importTotalLabel.enter().append('text').attr('x', midX).attr('text-anchor', 'end')
             .attr('class', 'totalLabel').attr('y', this.barGraphHeight - this.barGraphBottomPadding + 25);
